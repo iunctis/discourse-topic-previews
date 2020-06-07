@@ -12,6 +12,7 @@ var previewUrl = function (thumbnails) {
   const preferLowRes = (Discourse.User._current === null) ? false : Discourse.User._current.custom_fields.tlp_user_prefs_prefer_low_res_thumbnails;
   if (thumbnails) {
     let resLevel = Discourse.SiteSettings.topic_list_thumbnail_resolution_level
+    resLevel = Math.round(((thumbnails.length - 1)/6) * resLevel);
     if (preferLowRes) {resLevel++};
     if (window.devicePixelRatio && resLevel > 0) {resLevel--};
     return resLevel <= thumbnails.length - 1
@@ -30,7 +31,7 @@ var renderUnboundPreview = function(thumbnails, params) {
   const opts = params.opts || {};
 
   if (!opts.tilesStyle && Discourse.Site.currentProp('mobileView')) {
-    return `<img class="thumbnail" src="${url}" loading="lazy"/>`;
+    return `<img class="thumbnail" src="${url}"/>`;
   };
 
   const settings = Discourse.SiteSettings;
@@ -52,7 +53,7 @@ var renderUnboundPreview = function(thumbnails, params) {
   const height_style = height ? `height:${height}${attrHeightSuffix};` : ``;
   const style = `${height_style}width:${width}${attrWidthSuffix}`;
 
-  return `<img class="${css_classes}" src="${url}" style="${style}" loading="lazy"/>`;
+  return `<img class="${css_classes}" src="${url}" style="${style}"/>`;
 };
 
 var testImageUrl = function(thumbnails, callback) {
